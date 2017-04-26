@@ -1,0 +1,93 @@
+package cn.itcast.utils;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
+/**
+ * Dom4jUtils.jar包
+ * 可以直接使用类名点来调用我的这两个方法
+ * <1>:PATH--默认路径为 "src/1.xml",在后续需要更改路径可以直接通过更改里面的路径，来统一修改
+ * <2>:Document getDocument(String path)--这个可以通过传入一个xml路径，来获取一个document对象
+ * <3>:Void  xmlWriters(String path,Document document)--这个可以通过传入一个xml路径，和一个Document对象来对原来xml进行回写操作(更新)
+ * 功能介绍
+ * Leo分享自己的Dom4j的快捷jar包，有什么疑问的可以通过以下方式来和我去的联系
+ * (1)如果有什么疑问的可以QQ联系 ： 452999164 ，也可以发邮件给我，452999164@qq.com
+ * (2)加微信：lgqgxut
+ */
+
+//
+public class Dom4jUtils_Leo {
+	public static void main(String[] args) {
+			
+		}
+	
+	
+	//把xml默认封装成一个常量，如果有需要的，可以直接到这里面修改
+	public static final String PATH = "src/p1.xml";
+	
+	
+	//返回document-->封装成一个方法
+	/**
+	 * 先分析
+	 * 1.参数列表写：一个xml的路径地址
+	 * 2.返回一个document
+	 * 
+	 */
+	
+	public static Document getDocument(String path) {
+		try {
+			//创建一个解析器
+			SAXReader reader = new SAXReader();
+			//通过xml的地址来获取一个document对象
+			Document document;
+			document = reader.read(path);
+			//返回document对象
+			return document;
+		} catch (DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;  //如果出现错误就返回空
+	}
+	
+	
+	//回写xml的方法
+	/**
+	 * 1.参数列表写：一个doucment的对象，一个xml的路径地址
+	 * 2.无返回值
+	 */
+	public static void xmlWriters(String path,Document document){
+		try {
+			//执行上面的步骤之后，已经完成了，不过还要回写xml-->到硬盘上面 ，与Dom不同，用的是XMLWriter这个类
+			//设置输出格式为漂亮的-->有缩进的效果
+			OutputFormat format = OutputFormat.createPrettyPrint();
+			
+			//这种格式，就是全部的语句除了第一行第一列的生名语句除外，别的都挤在第二行中,有中连接效果
+			//OutputFormat format1 = OutputFormat.createCompactFormat();
+
+			//然后进行回写输出
+			XMLWriter xmlWriter = new XMLWriter(new FileOutputStream(path), format);
+			//还要把dom4j中的document(树）回写到xml种去
+			xmlWriter.write(document);
+			//既然使用了流，就要把流关闭
+			xmlWriter.close();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}
